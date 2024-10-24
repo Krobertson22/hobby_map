@@ -20,6 +20,10 @@ let geoJsonLayer;
  .then(response => response.json())
  .then(data => {
      L.geoJSON(data).addTo(map);
+
+     // Add the search control to the map
+    const searchControl = new CustomSearchControl({ layer: geoJsonLayer });
+    map.addControl(new CustomSearchControl({ layer: geoJsonLayer }));
  })
 
  fetch('property_lines.geojson') // Replace with the actual path to your GeoJSON file
@@ -35,7 +39,7 @@ let geoJsonLayer;
 
 //LEAFLET
 
-// Define the Custom Search Control
+// Custom Search Control
 class CustomSearchControl extends L.Control {
     constructor(options) {
         super(options);
@@ -59,12 +63,6 @@ class CustomSearchControl extends L.Control {
                 return; // Exit early if the input is invalid
             }
 
-            // Reset styles for all layers if input is empty
-            if (searchTerm === '') {
-                this.resetStyles(); // Reset styles for all layers
-                return; // Exit early if there's no input
-            }
-
             // Reset styles for all layers
             this.resetStyles();
 
@@ -73,9 +71,21 @@ class CustomSearchControl extends L.Control {
             this._layer.eachLayer(layer => {
                 const properties = layer.feature.properties;
 
-                // Check if any property value matches the search term
-                const found = Object.values(properties).some(value => 
-                    value && value.toString().toLowerCase().includes(searchTerm)
+                // Log the properties for debugging
+                console.log(properties); // Log properties to ensure they are as expected
+
+                // Check if any specified property value matches the search term
+                const searchFields = [
+                    properties.asset_number,
+                    properties.title_of_plaque,
+                    properties.description_of_plaque,
+                    properties.tree_common_name,
+                    properties.tree_scientific_name,
+                    properties.date_of_tree_planted
+                ];
+
+                const found = searchFields.some(field => 
+                    field && field.toString().toLowerCase().includes(searchTerm)
                 );
 
                 // Highlight matching features
@@ -85,9 +95,9 @@ class CustomSearchControl extends L.Control {
                 }
             });
 
-            // If no matches found, you can choose to reset styles or notify the user
+            // Optional: log if no matches were found
             if (!anyMatchFound) {
-                console.log("No matches found"); // Optional: log or alert for no matches
+                console.log("No matches found");
             }
         });
         
@@ -112,5 +122,3 @@ class CustomSearchControl extends L.Control {
         return !invalidChars.test(input); // Return true if input is safe
     }
 }
-
-
