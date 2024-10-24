@@ -52,20 +52,6 @@ class CustomSearchControl extends L.Control {
         input.placeholder = 'Search...'; // Placeholder text for the search input
         container.appendChild(input);
 
-          // PinSearch component
-          var searchBar = L.control.pinSearch({
-            position: 'topright',
-            placeholder: 'Search...',
-            buttonText: 'Search',
-            onSearch: function(query) {
-                console.log('Search query:', query);
-                // Handle the search query here
-            },
-            searchBarWidth: '200px',
-            searchBarHeight: '30px',
-            maxSearchResults: 3
-        }).addTo(map);
-        
         // Event listener for input changes
         input.addEventListener('input', () => {
             const searchTerm = input.value.trim().toLowerCase(); // Trim whitespace and convert to lower case
