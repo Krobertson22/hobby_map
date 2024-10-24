@@ -46,11 +46,19 @@ class CustomSearchControl extends L.Control {
     }
 
     onAdd(map) {
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-        const input = L.DomUtil.create('input', 'leaflet-control-search');
-        
-        input.placeholder = 'Search...'; // Placeholder text for the search input
-        container.appendChild(input);
+          // PinSearch component
+          var searchBar = L.control.pinSearch({
+            position: 'topright',
+            placeholder: 'Search...',
+            buttonText: 'Search',
+            onSearch: function(query) {
+                console.log('Search query:', query);
+                // Handle the search query here
+            },
+            searchBarWidth: '200px',
+            searchBarHeight: '30px',
+            maxSearchResults: 5
+        }).addTo(map);
         
         // Event listener for input changes
         input.addEventListener('input', () => {
@@ -104,12 +112,6 @@ class CustomSearchControl extends L.Control {
         return container; // Return the control container
     }
 
-    // Function to reset styles for all layers
-    resetStyles() {
-        this._layer.eachLayer(layer => {
-            layer.setStyle({ fillColor: 'blue' }); // Default style
-        });
-    }
 
     // Function to validate input
     isValidInput(input) {
