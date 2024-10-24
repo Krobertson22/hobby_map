@@ -1,6 +1,6 @@
 
 // Initialize the Leaflet map
-const map = L.map('map').setView([144.97439, 37.83045], 13); // Replace with your desired coordinates and zoom level
+const map = L.map('map').setView([-37.83045, 144.97439], 13); // Replace with your desired coordinates and zoom level
 
 
 
