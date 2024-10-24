@@ -6,10 +6,12 @@ const map = L.map('map').setView([-37.83045, 144.97439], 17); // Replace with yo
 
  // Add OpenStreetMap tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 15.7,
+    minZoom: 15.7,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+// Define a variable to hold your GeoJSON layer
+let geoJsonLayer;
 
 //BODY
 
@@ -33,7 +35,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 //LEAFLET
 
-
+// Define the Custom Search Control
 class CustomSearchControl extends L.Control {
     constructor(options) {
         super(options);
