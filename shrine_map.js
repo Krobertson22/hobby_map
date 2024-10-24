@@ -14,7 +14,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
  // Fetch GeoJSON data and add it to the map
- fetch('"C:\Users\losts\Documents\GitHub\hobby_map\plaques.geojson"') // Replace with the actual path to your GeoJSON file
+ fetch('plaques.geojson') // Replace with the actual path to your GeoJSON file
  .then(response => response.json())
  .then(data => {
      L.geoJSON(data).addTo(map);
