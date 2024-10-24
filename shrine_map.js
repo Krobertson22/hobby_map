@@ -46,6 +46,12 @@ class CustomSearchControl extends L.Control {
     }
 
     onAdd(map) {
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const input = L.DomUtil.create('input', 'leaflet-control-search');
+        
+        input.placeholder = 'Search...'; // Placeholder text for the search input
+        container.appendChild(input);
+
           // PinSearch component
           var searchBar = L.control.pinSearch({
             position: 'topright',
@@ -57,7 +63,7 @@ class CustomSearchControl extends L.Control {
             },
             searchBarWidth: '200px',
             searchBarHeight: '30px',
-            maxSearchResults: 5
+            maxSearchResults: 3
         }).addTo(map);
         
         // Event listener for input changes
