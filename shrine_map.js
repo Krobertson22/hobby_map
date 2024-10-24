@@ -125,15 +125,3 @@ class CustomSearchControl extends L.Control {
     }
 }
 
-var plaquesLayer = L.geoJSON(null, {
-    onEachFeature: function (feature, layer) {
-        layer.bindPopup(feature.properties.title_of_plaque);
-    }
-}).addTo(map);
-
-fetch('path/to/plaques.geojson')
-    .then(response => response.json())
-    .then(data => plaquesLayer.addData(data));
-
-// Add the custom search control to the map
-map.addControl(new CustomSearchControl({ layer: plaquesLayer }));
