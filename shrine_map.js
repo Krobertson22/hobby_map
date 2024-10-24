@@ -1,12 +1,12 @@
 //HEAD
 // Initialize the Leaflet map
-const map = L.map('map').setView([-37.83045, 144.97439], 5); // Replace with your desired coordinates and zoom level
+const map = L.map('map').setView([-37.83045, 144.97439], 17); // Replace with your desired coordinates and zoom level
 
 
 
  // Add OpenStreetMap tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 5,
+    maxZoom: 15.7,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
