@@ -69,6 +69,7 @@ class CustomSearchControl extends L.Control {
             this.resetStyles();
 
             // Search logic
+            let anyMatchFound = false; // Track if any match is found
             this._layer.eachLayer(layer => {
                 const properties = layer.feature.properties;
 
@@ -80,8 +81,14 @@ class CustomSearchControl extends L.Control {
                 // Highlight matching features
                 if (found) {
                     layer.setStyle({ fillColor: 'yellow' }); // Highlight color for matching features
+                    anyMatchFound = true; // Set flag if a match is found
                 }
             });
+
+            // If no matches found, you can choose to reset styles or notify the user
+            if (!anyMatchFound) {
+                console.log("No matches found"); // Optional: log or alert for no matches
+            }
         });
         
         return container; // Return the control container
@@ -107,6 +114,3 @@ class CustomSearchControl extends L.Control {
 }
 
 
-// Usage example (assuming geoJsonLayer is defined):
-const customSearchControl = new CustomSearchControl({ layer: geoJsonLayer });
-map.addControl(customSearchControl);
