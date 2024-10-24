@@ -15,6 +15,13 @@ let geoJsonLayer;
 
 //BODY
 
+// Load plaques.geojson
+var plaquesLayer = L.geoJSON(null, {
+    onEachFeature: function (feature, layer) {
+        layer.bindPopup(feature.properties.title_of_plaque);
+    }
+}).addTo(map);
+
  // Fetch GeoJSON data and add it to the map
  fetch('plaques.geojson') // Replace with the actual path to your GeoJSON file
  .then(response => response.json())
@@ -37,9 +44,7 @@ let geoJsonLayer;
  });
 
 
-//LEAFLET
-
-// Custom Search Control
+// LEAFLET 
 class CustomSearchControl extends L.Control {
     constructor(options) {
         super(options);
@@ -49,10 +54,10 @@ class CustomSearchControl extends L.Control {
     onAdd(map) {
         const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
         const input = L.DomUtil.create('input', 'leaflet-control-search');
-        
+
         input.placeholder = 'Search...'; // Placeholder text for the search input
         container.appendChild(input);
-        
+
         // Event listener for input changes
         input.addEventListener('input', () => {
             const searchTerm = input.value.trim().toLowerCase(); // Trim whitespace and convert to lower case
@@ -71,10 +76,7 @@ class CustomSearchControl extends L.Control {
             this._layer.eachLayer(layer => {
                 const properties = layer.feature.properties;
 
-                // Log the properties for debugging
-                console.log(properties); // Log properties to ensure they are as expected
-
-                // Check if any specified property value matches the search term
+                // Search in the specified fields
                 const searchFields = [
                     properties.asset_number,
                     properties.title_of_plaque,
@@ -100,7 +102,7 @@ class CustomSearchControl extends L.Control {
                 console.log("No matches found");
             }
         });
-        
+
         return container; // Return the control container
     }
 
@@ -122,3 +124,16 @@ class CustomSearchControl extends L.Control {
         return !invalidChars.test(input); // Return true if input is safe
     }
 }
+
+var plaquesLayer = L.geoJSON(null, {
+    onEachFeature: function (feature, layer) {
+        layer.bindPopup(feature.properties.title_of_plaque);
+    }
+}).addTo(map);
+
+fetch('path/to/plaques.geojson')
+    .then(response => response.json())
+    .then(data => plaquesLayer.addData(data));
+
+// Add the custom search control to the map
+map.addControl(new CustomSearchControl({ layer: plaquesLayer }));
