@@ -2,7 +2,9 @@
 // Initialize the Leaflet map
 const map = L.map('map').setView([-37.83045, 144.97439], 17); // Replace with your desired coordinates and zoom level
 
-// Add OpenStreetMap tile layer
+
+
+ // Add OpenStreetMap tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     minZoom: 15.7,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -13,28 +15,27 @@ let geoJsonLayer;
 
 //BODY
 
-// Fetch GeoJSON data and add it to the map
-fetch('plaques.geojson') // Replace with the actual path to your GeoJSON file
-  .then(response => response.json())
-  .then(data => {
-      geoJsonLayer = L.geoJSON(data).addTo(map);
+ // Fetch GeoJSON data and add it to the map
+ fetch('plaques.geojson') // Replace with the actual path to your GeoJSON file
+ .then(response => response.json())
+ .then(data => {
+     L.geoJSON(data).addTo(map);
 
-      // Add the search control to the map
-      const searchControl = new CustomSearchControl({ layer: geoJsonLayer });
-      map.addControl(searchControl);
-  })
-  .catch(error => {
-      console.error('Error loading plaques GeoJSON:', error);
-  });
+     // Add the search control to the map
+    const searchControl = new CustomSearchControl({ layer: geoJsonLayer });
+    map.addControl(new CustomSearchControl({ layer: geoJsonLayer }));
+ })
 
-fetch('property_lines.geojson') // Replace with the actual path to your GeoJSON file
-  .then(response => response.json())
-  .then(data => {
-      L.geoJSON(data).addTo(map);
-  })
-  .catch(error => {
-      console.error('Error loading GeoJSON:', error);
-  });
+ fetch('property_lines.geojson') // Replace with the actual path to your GeoJSON file
+ .then(response => response.json())
+ .then(data => {
+     L.geoJSON(data).addTo(map);
+ })
+
+ .catch(error => {
+     console.error('Error loading GeoJSON:', error);
+ });
+
 
 //LEAFLET
 
@@ -51,7 +52,7 @@ class CustomSearchControl extends L.Control {
         
         input.placeholder = 'Search...'; // Placeholder text for the search input
         container.appendChild(input);
-
+        
         // Event listener for input changes
         input.addEventListener('input', () => {
             const searchTerm = input.value.trim().toLowerCase(); // Trim whitespace and convert to lower case
@@ -83,10 +84,9 @@ class CustomSearchControl extends L.Control {
                     properties.date_of_tree_planted
                 ];
 
-                // Filter out null or undefined properties to avoid false matches
-                const found = searchFields
-                    .filter(field => field) // Ignore undefined or null fields
-                    .some(field => field.toString().toLowerCase().includes(searchTerm)); // Match only valid fields
+                const found = searchFields.some(field => 
+                    field && field.toString().toLowerCase().includes(searchTerm)
+                );
 
                 // Highlight matching features
                 if (found) {
@@ -104,6 +104,12 @@ class CustomSearchControl extends L.Control {
         return container; // Return the control container
     }
 
+    // Function to reset styles for all layers
+    resetStyles() {
+        this._layer.eachLayer(layer => {
+            layer.setStyle({ fillColor: 'blue' }); // Default style
+        });
+    }
 
     // Function to validate input
     isValidInput(input) {
